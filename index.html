@@ -19,7 +19,7 @@
             padding: 20px;
         }
         
-        .report-container {
+        .app-container {
             max-width: 1200px;
             margin: 0 auto;
             background-color: white;
@@ -28,26 +28,129 @@
             overflow: hidden;
         }
         
-        .report-header {
+        .app-header {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             color: white;
             padding: 30px;
             text-align: center;
         }
         
-        .report-header h1 {
+        .app-header h1 {
             font-size: 28px;
             margin-bottom: 10px;
         }
         
-        .report-header .subtitle {
+        .app-header .subtitle {
             font-size: 16px;
             opacity: 0.9;
+        }
+        
+        .input-section {
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .text-input-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .text-input-label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .text-area {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .file-upload-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .file-upload-label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .file-upload-box {
+            border: 2px dashed #3498db;
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            background-color: #e8f4fc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-box:hover {
+            background-color: #d4e9f7;
+        }
+        
+        .file-upload-box i {
+            font-size: 40px;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .analyze-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .analyze-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .report-content {
             padding: 30px;
             margin: 0 2.5cm;
+            display: none;
         }
         
         .analysis-section {
@@ -216,25 +319,25 @@
             border-radius: 5px;
         }
         
-        .analyze-btn {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 30px auto;
-            padding: 15px 20px;
-            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
         }
         
-        .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         @media (max-width: 768px) {
@@ -269,13 +372,38 @@
     </style>
 </head>
 <body>
-    <div class="report-container">
-        <div class="report-header">
-            <h1>RELATÓRIO COMPLETO DE ANÁLISE</h1>
-            <div class="subtitle">Detector Humano vs IA | Data: 24/10/2025 às 09:30:36</div>
+    <div class="app-container">
+        <div class="app-header">
+            <h1>DETECTOR HUMANO vs IA</h1>
+            <div class="subtitle">Analise textos para identificar conteúdo gerado por IA</div>
         </div>
         
-        <button class="analyze-btn" id="analyzeBtn">Analisar Conteúdo</button>
+        <div class="input-section">
+            <div class="input-container">
+                <div class="text-input-container">
+                    <label class="text-input-label" for="textInput">Cole seu texto aqui:</label>
+                    <textarea id="textInput" class="text-area" placeholder="Cole o texto que deseja analisar aqui..."></textarea>
+                </div>
+                
+                <div class="file-upload-container">
+                    <label class="file-upload-label">Ou faça upload de um arquivo:</label>
+                    <div class="file-upload-box" id="fileUploadBox">
+                        <i>📁</i>
+                        <p>Clique para selecionar um arquivo ou arraste e solte aqui</p>
+                        <p class="file-info">Formatos suportados: PDF, DOC, DOCX, TXT</p>
+                        <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt">
+                    </div>
+                    <div id="fileName" class="file-info"></div>
+                </div>
+                
+                <button class="analyze-btn" id="analyzeBtn" disabled>Analisar Conteúdo</button>
+            </div>
+        </div>
+        
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Analisando conteúdo... Isso pode levar alguns segundos.</p>
+        </div>
         
         <div class="report-content" id="reportContent">
             <div class="analysis-section">
@@ -410,29 +538,93 @@
     </div>
 
     <script>
-        document.getElementById('analyzeBtn').addEventListener('click', function() {
-            // Simulação de análise - em um caso real, aqui seria feita uma requisição ao backend
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('textInput');
+            const fileInput = document.getElementById('fileInput');
+            const fileUploadBox = document.getElementById('fileUploadBox');
+            const fileName = document.getElementById('fileName');
+            const analyzeBtn = document.getElementById('analyzeBtn');
             const reportContent = document.getElementById('reportContent');
+            const loadingIndicator = document.getElementById('loadingIndicator');
             
-            // Adiciona uma animação de carregamento
-            this.innerHTML = 'Analisando...';
-            this.disabled = true;
+            // Verifica se há conteúdo para habilitar o botão de análise
+            function checkInput() {
+                if (textInput.value.trim() !== '' || fileInput.files.length > 0) {
+                    analyzeBtn.disabled = false;
+                } else {
+                    analyzeBtn.disabled = true;
+                }
+            }
             
-            // Simula o tempo de análise
-            setTimeout(() => {
-                this.innerHTML = 'Análise Concluída!';
-                this.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
+            // Event listener para a área de texto
+            textInput.addEventListener('input', checkInput);
+            
+            // Event listener para a caixa de upload de arquivo
+            fileUploadBox.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Event listener para quando um arquivo é selecionado
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    fileName.textContent = `Arquivo selecionado: ${fileInput.files[0].name}`;
+                    // Limpa a área de texto se um arquivo for selecionado
+                    textInput.value = '';
+                } else {
+                    fileName.textContent = '';
+                }
+                checkInput();
+            });
+            
+            // Permite arrastar e soltar arquivos
+            fileUploadBox.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileUploadBox.style.backgroundColor = '#d4e9f7';
+            });
+            
+            fileUploadBox.addEventListener('dragleave', function() {
+                fileUploadBox.style.backgroundColor = '#e8f4fc';
+            });
+            
+            fileUploadBox.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileUploadBox.style.backgroundColor = '#e8f4fc';
                 
-                // Garante que o conteúdo permaneça dentro das margens
-                reportContent.style.margin = '0 2.5cm';
-                reportContent.style.padding = '30px';
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    fileName.textContent = `Arquivo selecionado: ${fileInput.files[0].name}`;
+                    // Limpa a área de texto se um arquivo for selecionado
+                    textInput.value = '';
+                    checkInput();
+                }
+            });
+            
+            // Event listener para o botão de análise
+            analyzeBtn.addEventListener('click', function() {
+                // Mostra o indicador de carregamento
+                loadingIndicator.style.display = 'block';
+                reportContent.style.display = 'none';
+                analyzeBtn.disabled = true;
                 
-                // Rolagem suave para o topo do relatório
-                window.scrollTo({
-                    top: document.querySelector('.report-header').offsetHeight,
-                    behavior: 'smooth'
-                });
-            }, 1500);
+                // Simula o tempo de análise (em um caso real, aqui seria feita uma requisição ao backend)
+                setTimeout(() => {
+                    // Esconde o indicador de carregamento
+                    loadingIndicator.style.display = 'none';
+                    
+                    // Mostra o relatório
+                    reportContent.style.display = 'block';
+                    
+                    // Atualiza o botão
+                    analyzeBtn.textContent = 'Nova Análise';
+                    analyzeBtn.disabled = false;
+                    
+                    // Rolagem suave para o relatório
+                    reportContent.scrollIntoView({ behavior: 'smooth' });
+                }, 2500);
+            });
+            
+            // Inicialmente desabilita o botão de análise
+            checkInput();
         });
     </script>
 </body>
