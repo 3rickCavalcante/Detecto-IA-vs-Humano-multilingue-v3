@@ -846,7 +846,7 @@
             }
         }
 
-        // ========== FUNÇÃO COMPLETA DO PDF COM CORREÇÕES ==========
+        // ========== FUNÇÃO COMPLETA DO PDF COM MARCADORES VISUAIS ATRAENTES ==========
 
         function generateDetailedPDF() {
             if (!currentAnalysisResult) {
@@ -864,7 +864,7 @@
             
             let yPosition = 20;
             const pageWidth = doc.internal.pageSize.width;
-            const margin = 15; // Margem reduzida para mais espaço
+            const margin = 15;
             const contentWidth = pageWidth - (margin * 2);
             
             // Cabeçalho
@@ -883,50 +883,50 @@
 
             // Resultado Principal
             doc.setFontSize(14);
-            doc.text("RESULTADO PRINCIPAL", margin, yPosition);
+            doc.text("🎯 RESULTADO PRINCIPAL", margin, yPosition);
             yPosition += 8;
             
             doc.setFontSize(10);
-            doc.text(`Probabilidade de Conteúdo Humano: ${result.humanProbability}%`, margin, yPosition);
+            doc.text(`📊 Probabilidade de Conteúdo Humano: ${result.humanProbability}%`, margin, yPosition);
             yPosition += 5;
-            doc.text(`Probabilidade de Conteúdo de IA: ${result.aiProbability}%`, margin, yPosition);
+            doc.text(`🤖 Probabilidade de Conteúdo de IA: ${result.aiProbability}%`, margin, yPosition);
             yPosition += 5;
-            doc.text(`Nível de Confiança da Análise: ${result.confidence}%`, margin, yPosition);
+            doc.text(`✅ Nível de Confiança da Análise: ${result.confidence}%`, margin, yPosition);
             yPosition += 12;
 
             // LEGENDA VISUAL MELHORADA
             doc.setFontSize(12);
-            doc.text("🎯 LEGENDA PARA INTERPRETAÇÃO", margin, yPosition);
+            doc.text("🌈 LEGENDA PARA INTERPRETAÇÃO", margin, yPosition);
             yPosition += 8;
             
             // Elementos visuais da legenda
             doc.setFillColor(248, 215, 218); // Vermelho claro - IA
             doc.rect(margin, yPosition, 8, 8, 'F');
             doc.setFontSize(8);
-            doc.text(" Padrões de IA Detectados", margin + 12, yPosition + 6);
+            doc.text(" 🔴 Padrões de IA Detectados", margin + 12, yPosition + 6);
             yPosition += 12;
             
             doc.setFillColor(212, 237, 218); // Verde claro - Humano
             doc.rect(margin, yPosition, 8, 8, 'F');
-            doc.text(" Elementos Humanos Identificados", margin + 12, yPosition + 6);
+            doc.text(" 🟢 Elementos Humanos Identificados", margin + 12, yPosition + 6);
             yPosition += 12;
             
             doc.setFillColor(255, 243, 205); // Amarelo - Melhorias
             doc.rect(margin, yPosition, 8, 8, 'F');
-            doc.text(" Áreas para Melhoria", margin + 12, yPosition + 6);
+            doc.text(" 🟡 Áreas para Melhoria", margin + 12, yPosition + 6);
             yPosition += 15;
 
             // Informações do Texto
             doc.setFontSize(12);
-            doc.text("📊 INFORMAÇÕES DO TEXTO ANALISADO", margin, yPosition);
+            doc.text("📋 INFORMAÇÕES DO TEXTO ANALISADO", margin, yPosition);
             yPosition += 8;
             
             doc.setFontSize(9);
-            doc.text(`Idioma: ${result.detectedLanguage.toUpperCase()}`, margin, yPosition);
+            doc.text(`🌐 Idioma: ${result.detectedLanguage.toUpperCase()}`, margin, yPosition);
             yPosition += 5;
-            doc.text(`Tipo de Conteúdo: ${result.contentType}`, margin, yPosition);
+            doc.text(`📝 Tipo de Conteúdo: ${result.contentType}`, margin, yPosition);
             yPosition += 5;
-            doc.text(`Estatísticas: ${result.wordCount} palavras, ${result.sentenceCount} sentenças`, margin, yPosition);
+            doc.text(`📈 Estatísticas: ${result.wordCount} palavras, ${result.sentenceCount} sentenças`, margin, yPosition);
             yPosition += 12;
 
             // TEXTO COMPLETO COM DESTAQUES VISUAIS
@@ -934,7 +934,7 @@
             yPosition = 20;
             
             doc.setFontSize(14);
-            doc.text("📝 TEXTO COMPLETO ANALISADO COM DESTAQUES", margin, yPosition);
+            doc.text("✨ TEXTO COMPLETO ANALISADO COM DESTAQUES", margin, yPosition);
             yPosition += 10;
             
             doc.setFontSize(9);
@@ -945,7 +945,7 @@
             const lines = doc.splitTextToSize(highlightedText, contentWidth);
             
             let currentPage = 2;
-            const maxLinesPerPage = 45; // Aumentado para mais conteúdo por página
+            const maxLinesPerPage = 45;
             let lineCount = 0;
 
             for (let i = 0; i < lines.length; i++) {
@@ -958,7 +958,7 @@
                     // Adicionar cabeçalho de página
                     doc.setFontSize(8);
                     doc.setTextColor(100, 100, 100);
-                    doc.text(`Texto Analisado - Página ${currentPage - 1}`, pageWidth / 2, 10, { align: 'center' });
+                    doc.text(`📄 Texto Analisado - Página ${currentPage - 1}`, pageWidth / 2, 10, { align: 'center' });
                     doc.setTextColor(0, 0, 0);
                     doc.setFontSize(9);
                 }
@@ -980,11 +980,11 @@
                     doc.text(lines[i], margin, yPosition);
                 }
                 
-                yPosition += 4.5; // Espaçamento reduzido
+                yPosition += 4.5;
                 lineCount++;
             }
 
-            // PADRÕES DETECTADOS E RECOMENDAÇÕES COM FORMATAÇÃO CORRIGIDA
+            // PADRÕES DETECTADOS E RECOMENDAÇÕES COM MARCADORES VISUAIS
             doc.addPage();
             yPosition = 20;
             
@@ -1001,29 +1001,29 @@
                         yPosition = 20;
                     }
                     
-                    // Título do padrão
+                    // Título do padrão com marcador visual
                     doc.setFont(undefined, 'bold');
-                    const title = `${index + 1}. ${pattern.description}`;
+                    const title = `🔍 ${index + 1}. ${pattern.description}`;
                     const titleLines = doc.splitTextToSize(title, contentWidth);
                     titleLines.forEach(line => {
                         doc.text(line, margin, yPosition);
                         yPosition += 5;
                     });
                     
-                    // Exemplo (justificado)
+                    // Exemplo com marcador visual
                     doc.setFont(undefined, 'normal');
                     doc.setTextColor(100, 100, 100);
-                    const exampleText = `Exemplo: "${pattern.examples[0]}"`;
+                    const exampleText = `💬 Exemplo: "${pattern.examples[0]}"`;
                     const exampleLines = doc.splitTextToSize(exampleText, contentWidth);
                     exampleLines.forEach(line => {
                         doc.text(line, margin + 5, yPosition);
                         yPosition += 4;
                     });
                     
-                    // Recomendação (justificada)
+                    // Recomendação com marcador visual
                     doc.setTextColor(200, 0, 0);
                     doc.setFont(undefined, 'bold');
-                    const recommendationText = `🔧 RECOMENDAÇÃO: ${pattern.suggestion}`;
+                    const recommendationText = `🚀 RECOMENDAÇÃO: ${pattern.suggestion}`;
                     const recommendationLines = doc.splitTextToSize(recommendationText, contentWidth - 5);
                     recommendationLines.forEach(line => {
                         doc.text(line, margin + 5, yPosition);
@@ -1032,18 +1032,18 @@
                     
                     doc.setTextColor(0, 0, 0);
                     doc.setFont(undefined, 'normal');
-                    yPosition += 6; // Espaço entre itens
+                    yPosition += 8; // Espaço entre itens
                 });
             } else {
                 doc.setFontSize(10);
-                doc.text("✅ Nenhum padrão forte de IA foi detectado no texto.", margin, yPosition);
+                doc.text("🎉 Nenhum padrão forte de IA foi detectado no texto.", margin, yPosition);
                 yPosition += 10;
             }
 
             // RECOMENDAÇÕES GERAIS VINCULADAS AOS PROBLEMAS
             yPosition += 8;
             doc.setFontSize(12);
-            doc.text("🔧 RECOMENDAÇÕES ESPECÍFICAS PARA MELHORIA", margin, yPosition);
+            doc.text("💡 RECOMENDAÇÕES ESPECÍFICAS PARA MELHORIA", margin, yPosition);
             yPosition += 8;
 
             const specificRecommendations = generateSpecificRecommendations(result);
@@ -1056,13 +1056,65 @@
                 }
                 
                 // Quebrar texto longo para caber na margem
-                const recLines = doc.splitTextToSize(`• ${rec}`, contentWidth);
+                const recLines = doc.splitTextToSize(`⭐ ${rec}`, contentWidth);
                 recLines.forEach(line => {
                     doc.text(line, margin, yPosition);
                     yPosition += 4;
                 });
-                yPosition += 2; // Espaço extra entre recomendações
+                yPosition += 2;
             });
+
+            // PÁGINA FINAL COM RESUMO VISUAL
+            doc.addPage();
+            yPosition = 20;
+            
+            doc.setFontSize(16);
+            doc.text("📋 RESUMO DA ANÁLISE", margin, yPosition);
+            yPosition += 15;
+
+            // Resumo visual com ícones
+            doc.setFontSize(12);
+            doc.text("🎯 RESULTADO FINAL", margin, yPosition);
+            yPosition += 8;
+            
+            doc.setFontSize(10);
+            doc.text(`✅ Probabilidade de Conteúdo Humano: ${result.humanProbability}%`, margin, yPosition);
+            yPosition += 6;
+            doc.text(`🤖 Probabilidade de Conteúdo de IA: ${result.aiProbability}%`, margin, yPosition);
+            yPosition += 6;
+            doc.text(`🎯 Nível de Confiança: ${result.confidence}%`, margin, yPosition);
+            yPosition += 12;
+
+            // Estatísticas com ícones
+            doc.setFontSize(12);
+            doc.text("📊 ESTATÍSTICAS DA ANÁLISE", margin, yPosition);
+            yPosition += 8;
+            
+            doc.setFontSize(10);
+            doc.text(`🔍 Padrões de IA Detectados: ${result.advancedMetrics.strongAIPatterns}`, margin, yPosition);
+            yPosition += 6;
+            doc.text(`👤 Elementos Humanos Identificados: ${result.advancedMetrics.strongHumanPatterns}`, margin, yPosition);
+            yPosition += 6;
+            doc.text(`📚 Riqueza Lexical: ${result.advancedMetrics.lexicalRichness}%`, margin, yPosition);
+            yPosition += 6;
+            doc.text(`⚡ Complexidade de Frases: ${result.advancedMetrics.sentenceVariety}`, margin, yPosition);
+            yPosition += 15;
+
+            // Mensagem final personalizada
+            doc.setFontSize(11);
+            if (result.humanProbability >= 70) {
+                doc.text("🎉 Excelente! O texto apresenta fortes características de autoria humana.", margin, yPosition);
+                yPosition += 6;
+                doc.text("Continue mantendo seu estilo pessoal e autêntico.", margin, yPosition);
+            } else if (result.humanProbability >= 50) {
+                doc.text("📝 Bom trabalho! O texto apresenta características mistas.", margin, yPosition);
+                yPosition += 6;
+                doc.text("Considere as recomendações para tornar o texto mais autêntico.", margin, yPosition);
+            } else {
+                doc.text("🔄 Há oportunidades de melhoria no texto.", margin, yPosition);
+                yPosition += 6;
+                doc.text("Siga as recomendações específicas para aumentar a autenticidade.", margin, yPosition);
+            }
 
             // Rodapé em todas as páginas
             const totalPages = doc.internal.getNumberOfPages();
@@ -1070,7 +1122,7 @@
                 doc.setPage(i);
                 doc.setFontSize(8);
                 doc.setTextColor(100, 100, 100);
-                doc.text(`Relatório Gerado por Detector Multilíngue - Página ${i} de ${totalPages}`, 
+                doc.text(`📄 Relatório Gerado por Detector Multilíngue - Página ${i} de ${totalPages}`, 
                         pageWidth / 2, doc.internal.pageSize.height - 10, { align: 'center' });
             }
 
@@ -1101,38 +1153,38 @@
             
             if (issues.length === 0) {
                 return [
-                    "O texto apresenta boas características de autoria humana",
-                    "Mantenha a diversidade vocabular e sintática",
-                    "Continue desenvolvendo seu estilo pessoal de escrita"
+                    "🎯 O texto apresenta boas características de autoria humana",
+                    "💫 Mantenha a diversidade vocabular e sintática",
+                    "✨ Continue desenvolvendo seu estilo pessoal de escrita"
                 ];
             }
 
             // Recomendações específicas baseadas nos problemas detectados
             issues.forEach(issue => {
                 if (issue.description.includes('Transições formulaicas')) {
-                    recommendations.push("VARIE AS TRANSIÇÕES: Substitua 'além disso', 'portanto' por conectivos mais naturais como 'igualmente', 'dessa maneira', 'por outro lado'");
+                    recommendations.push("🔄 VARIE AS TRANSIÇÕES: Substitua 'além disso', 'portanto' por conectivos mais naturais como 'igualmente', 'dessa maneira', 'por outro lado'");
                 }
                 if (issue.description.includes('Estruturas impessoais')) {
-                    recommendations.push("EVITE ESTRUTURAS IMPESSOAIS: Em vez de 'pode-se observar que', use 'os dados revelam que' ou 'a análise demonstra que'");
+                    recommendations.push("👤 EVITE ESTRUTURAS IMPESSOAIS: Em vez de 'pode-se observar que', use 'os dados revelam que' ou 'a análise demonstra que'");
                 }
                 if (issue.description.includes('Fórmulas introdutórias')) {
-                    recommendations.push("SIMPLIFIQUE INTRODUÇÕES: Substitua 'convém notar que' por 'é importante considerar' ou apresente a informação diretamente");
+                    recommendations.push("🎯 SIMPLIFIQUE INTRODUÇÕES: Substitua 'convém notar que' por 'é importante considerar' ou apresente a informação diretamente");
                 }
                 if (issue.description.includes('Fórmulas de conclusão')) {
-                    recommendations.push("DIVERSIFIQUE CONCLUSÕES: Use diferentes formas de finalizar parágrafos além das fórmulas padrão");
+                    recommendations.push("💫 DIVERSIFIQUE CONCLUSÕES: Use diferentes formas de finalizar parágrafos além das fórmulas padrão");
                 }
             });
 
             // Recomendações gerais baseadas nas métricas
             if (result.advancedMetrics.lexicalRichness < 60) {
-                recommendations.push("ENRIQUEÇA O VOCABULÁRIO: Use mais sinônimos e evite repetição de termos");
+                recommendations.push("📚 ENRIQUEÇA O VOCABULÁRIO: Use mais sinônimos e evite repetição de termos");
             }
             
             if (result.advancedMetrics.strongAIPatterns > 3) {
-                recommendations.push("REDUZA PADRÕES DE IA: Reescreva seções com múltiplos padrões detectados para maior autenticidade");
+                recommendations.push("⚠️ REDUZA PADRÕES DE IA: Reescreva seções com múltiplos padrões detectados para maior autenticidade");
             }
 
-            return recommendations.slice(0, 8); // Limitar a 8 recomendações
+            return recommendations.slice(0, 8);
         }
 
         // ========== FUNÇÕES DE PROCESSAMENTO DE ARQUIVOS ==========
