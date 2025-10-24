@@ -1,0 +1,1 @@
+# Detecto-IA-vs-Humano-multilingue-v3
