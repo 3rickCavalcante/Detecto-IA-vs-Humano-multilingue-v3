@@ -5,73 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Análise - Detector Humano vs IA</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 21cm;
-            margin: 0 auto;
-            padding: 1.5cm 2.5cm;
-            background-color: #f9f9f9;
-        }
-        
-        .container {
-            background-color: white;
-            padding: 2.5cm;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-        
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-        
-        h1 {
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            text-align: center;
-        }
-        
-        .header-info {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #7f8c8d;
-        }
-        
-        .result-section {
-            background-color: #f8f9fa;
+            background-color: #f5f7fa;
             padding: 20px;
-            border-radius: 5px;
-            margin: 20px 0;
+        }
+        
+        .report-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .report-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .report-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .report-header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .report-content {
+            padding: 30px;
+            margin: 0 2.5cm;
+        }
+        
+        .analysis-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
             border-left: 4px solid #3498db;
         }
         
-        .result-item {
-            margin: 15px 0;
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
             display: flex;
             align-items: center;
         }
         
-        .result-label {
-            font-weight: bold;
-            min-width: 250px;
+        .section-title i {
+            margin-right: 10px;
+            font-size: 1.2em;
         }
         
-        .human-probability {
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        
+        .result-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .human {
             color: #27ae60;
-            font-weight: bold;
-            font-size: 1.2em;
         }
         
-        .ai-probability {
+        .ai {
             color: #e74c3c;
-            font-weight: bold;
-            font-size: 1.2em;
         }
         
         .confidence {
             color: #f39c12;
-            font-weight: bold;
         }
         
         .legend {
@@ -84,7 +115,6 @@
         .legend-item {
             display: flex;
             align-items: center;
-            margin-right: 20px;
         }
         
         .legend-color {
@@ -143,10 +173,11 @@
         }
         
         .stat-card {
-            background-color: #f8f9fa;
+            background-color: white;
             padding: 15px;
             border-radius: 5px;
             text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             border-top: 3px solid #3498db;
         }
         
@@ -163,14 +194,14 @@
         
         .final-result {
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 5px;
+            border-radius: 8px;
             margin: 30px 0;
         }
         
         .final-percentage {
-            font-size: 2.5em;
+            font-size: 3em;
             font-weight: bold;
             margin: 10px 0;
         }
@@ -180,144 +211,229 @@
             text-align: center;
             margin-top: 30px;
             color: #7f8c8d;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
         }
         
-        @media print {
-            body {
-                background-color: white;
-                padding: 0;
-                margin: 0;
-                box-shadow: none;
+        .analyze-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 30px auto;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .report-content {
+                margin: 0 1cm;
+                padding: 20px;
             }
             
-            .container {
-                box-shadow: none;
-                padding: 0;
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .statistics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .report-content {
+                margin: 0 0.5cm;
+                padding: 15px;
+            }
+            
+            .statistics {
+                grid-template-columns: 1fr;
+            }
+            
+            .legend {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>RELATÓRIO COMPLETO DE ANÁLISE - DETECTOR HUMANO vs IA</h1>
-        
-        <div class="header-info">
-            <p><strong>Data da Análise:</strong> 24/10/2025 às 09:30:36</p>
-            <p>Texto Completo com Destaques e Recomendações Específicas</p>
+    <div class="report-container">
+        <div class="report-header">
+            <h1>RELATÓRIO COMPLETO DE ANÁLISE</h1>
+            <div class="subtitle">Detector Humano vs IA | Data: 24/10/2025 às 09:30:36</div>
         </div>
         
-        <div class="result-section">
-            <h2>📊 RESULTADO PRINCIPAL</h2>
-            <div class="result-item">
-                <span class="result-label">Probabilidade de Conteúdo Humano:</span>
-                <span class="human-probability">43%</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Probabilidade de Conteúdo de IA:</span>
-                <span class="ai-probability">57%</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Nível de Confiança da Análise:</span>
-                <span class="confidence">84%</span>
-            </div>
-        </div>
+        <button class="analyze-btn" id="analyzeBtn">Analisar Conteúdo</button>
         
-        <h2>📖 LEGENDA PARA INTERPRETAÇÃO</h2>
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color ai-detected"></div>
-                <span>Padrões de IA Detectados</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color human-identified"></div>
-                <span>Elementos Humanos Identificados</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color improvement-areas"></div>
-                <span>Áreas para Melhoria</span>
-            </div>
-        </div>
-        
-        <div class="text-info">
-            <h2>📝 INFORMAÇÕES DO TEXTO ANALISADO</h2>
-            <div class="result-item">
-                <span class="result-label">Idioma:</span>
-                <span>Espanhol (ES)</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Tipo de Conteúdo:</span>
-                <span>Acadêmico</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Estatísticas:</span>
-                <span>3571 palavras, 212 sentenças</span>
-            </div>
-        </div>
-        
-        <h2>🔍 PADRÕES DE IA DETECTADOS E RECOMENDAÇÕES</h2>
-        
-        <div class="recommendations">
-            <h3>Transições Formulaicas Comuns em IA</h3>
-            <div class="recommendation-item">
-                <strong>Exemplo detectado:</strong> "Por lo tanto"
-            </div>
-            <div class="recommendation-item">
-                <strong>Recomendação:</strong> Substitua por transições mais naturais ou integre organicamente
+        <div class="report-content" id="reportContent">
+            <div class="analysis-section">
+                <h2 class="section-title"><i>📊</i> RESULTADO PRINCIPAL</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div>Probabilidade de Conteúdo Humano</div>
+                        <div class="result-value human">43%</div>
+                        <div>Elementos humanos identificados no texto</div>
+                    </div>
+                    <div class="result-card">
+                        <div>Probabilidade de Conteúdo de IA</div>
+                        <div class="result-value ai">57%</div>
+                        <div>Padrões de IA detectados no texto</div>
+                    </div>
+                    <div class="result-card">
+                        <div>Nível de Confiança</div>
+                        <div class="result-value confidence">84%</div>
+                        <div>Precisão estimada da análise</div>
+                    </div>
+                </div>
             </div>
             
-            <div class="recommendation-item">
-                <strong>Exemplo detectado:</strong> "En conclusión"
+            <div class="analysis-section">
+                <h2 class="section-title"><i>📖</i> LEGENDA PARA INTERPRETAÇÃO</h2>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color ai-detected"></div>
+                        <span>Padrões de IA Detectados</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color human-identified"></div>
+                        <span>Elementos Humanos Identificados</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color improvement-areas"></div>
+                        <span>Áreas para Melhoria</span>
+                    </div>
+                </div>
             </div>
-            <div class="recommendation-item">
-                <strong>Recomendação:</strong> Substitua por transições mais naturais ou integre organicamente
+            
+            <div class="analysis-section">
+                <h2 class="section-title"><i>📝</i> INFORMAÇÕES DO TEXTO ANALISADO</h2>
+                <div class="text-info">
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="stat-label">Idioma</div>
+                            <div class="stat-value">Espanhol (ES)</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="stat-label">Tipo de Conteúdo</div>
+                            <div class="stat-value">Acadêmico</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="stat-label">Estatísticas</div>
+                            <div class="stat-value">3571 palavras</div>
+                            <div class="stat-label">212 sentenças</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <div class="recommendations">
-            <h3>Recomendações Específicas para Melhoria</h3>
-            <div class="recommendation-item">
-                <strong>Varie as transições:</strong> Substitua 'além disso', 'portanto' por conectivos como 'por outro lado', 'dessa maneira'
+            
+            <div class="analysis-section">
+                <h2 class="section-title"><i>🔍</i> PADRÕES DE IA DETECTADOS E RECOMENDAÇÕES</h2>
+                
+                <div class="recommendations">
+                    <h3>Transições Formulaicas Comuns em IA</h3>
+                    <div class="recommendation-item">
+                        <strong>Exemplo detectado:</strong> "Por lo tanto"
+                    </div>
+                    <div class="recommendation-item">
+                        <strong>Recomendação:</strong> Substitua por transições mais naturais ou integre organicamente
+                    </div>
+                    
+                    <div class="recommendation-item">
+                        <strong>Exemplo detectado:</strong> "En conclusión"
+                    </div>
+                    <div class="recommendation-item">
+                        <strong>Recomendação:</strong> Substitua por transições mais naturais ou integre organicamente
+                    </div>
+                </div>
+                
+                <div class="recommendations">
+                    <h3>Recomendações Específicas para Melhoria</h3>
+                    <div class="recommendation-item">
+                        <strong>Varie as transições:</strong> Substitua 'além disso', 'portanto' por conectivos como 'por outro lado', 'dessa maneira'
+                    </div>
+                    <div class="recommendation-item">
+                        <strong>Enriqueça o vocabulário:</strong> Use mais sinônimos e evite repetição de termos
+                    </div>
+                </div>
             </div>
-            <div class="recommendation-item">
-                <strong>Enriqueça o vocabulário:</strong> Use mais sinônimos e evite repetição de termos
+            
+            <div class="analysis-section">
+                <h2 class="section-title"><i>📈</i> RESUMO DA ANÁLISE</h2>
+                
+                <div class="final-result">
+                    <h3>RESULTADO FINAL</h3>
+                    <div class="final-percentage human">43%</div>
+                    <div>Probabilidade de Conteúdo Humano</div>
+                    <div class="final-percentage ai" style="margin-top: 20px;">57%</div>
+                    <div>Probabilidade de Conteúdo de IA</div>
+                    <div class="confidence" style="margin-top: 15px; font-size: 1.2em;">Nível de Confiança: 84%</div>
+                </div>
+                
+                <h3>ESTATÍSTICAS DA ANÁLISE</h3>
+                <div class="statistics">
+                    <div class="stat-card">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Padrões de IA Detectados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Elementos Humanos Identificados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">35.7%</div>
+                        <div class="stat-label">Riqueza Lexical</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">Moderada</div>
+                        <div class="stat-label">Complexidade de Frases</div>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <h2>📈 RESUMO DA ANÁLISE</h2>
-        
-        <div class="final-result">
-            <h3>RESULTADO FINAL</h3>
-            <div class="final-percentage human-probability">43%</div>
-            <div>Probabilidade de Conteúdo Humano</div>
-            <div class="final-percentage ai-probability">57%</div>
-            <div>Probabilidade de Conteúdo de IA</div>
-            <div class="confidence" style="margin-top: 15px;">Nível de Confiança: 84%</div>
-        </div>
-        
-        <h3>ESTATÍSTICAS DA ANÁLISE</h3>
-        <div class="statistics">
-            <div class="stat-card">
-                <div class="stat-value">2</div>
-                <div class="stat-label">Padrões de IA Detectados</div>
+            
+            <div class="summary">
+                <p>✅ Há oportunidades de melhoria no texto.</p>
+                <p>Siga as recomendações específicas para aumentar a autenticidade.</p>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">1</div>
-                <div class="stat-label">Elementos Humanos Identificados</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">35.7%</div>
-                <div class="stat-label">Riqueza Lexical</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">Moderada</div>
-                <div class="stat-label">Complexidade de Frases</div>
-            </div>
-        </div>
-        
-        <div class="summary">
-            <p>✅ Há oportunidades de melhoria no texto.</p>
-            <p>Siga as recomendações específicas para aumentar a autenticidade.</p>
         </div>
     </div>
+
+    <script>
+        document.getElementById('analyzeBtn').addEventListener('click', function() {
+            // Simulação de análise - em um caso real, aqui seria feita uma requisição ao backend
+            const reportContent = document.getElementById('reportContent');
+            
+            // Adiciona uma animação de carregamento
+            this.innerHTML = 'Analisando...';
+            this.disabled = true;
+            
+            // Simula o tempo de análise
+            setTimeout(() => {
+                this.innerHTML = 'Análise Concluída!';
+                this.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
+                
+                // Garante que o conteúdo permaneça dentro das margens
+                reportContent.style.margin = '0 2.5cm';
+                reportContent.style.padding = '30px';
+                
+                // Rolagem suave para o topo do relatório
+                window.scrollTo({
+                    top: document.querySelector('.report-header').offsetHeight,
+                    behavior: 'smooth'
+                });
+            }, 1500);
+        });
+    </script>
 </body>
 </html>
